@@ -1,8 +1,8 @@
 import express from "express";
 import user from "./routers/user.js";
-import cliente from "./routers/clientes.js";
+/* import cliente from "./routers/clientes.js";
 import producto from "./routers/producctos.js";
-import venta from "./routers/ventas.js";
+import venta from "./routers/ventas.js"; */
 import connectDB from "./config/db.js";
 import "dotenv/config";
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.static("public"));
 
 app.use('/user', user);//crear usuario
 
-//---producctos
+/* //---producctos
     app.use('/produccto/crear',producto);//agregar produccto
 
 //---clientes--
@@ -21,7 +21,7 @@ app.use("/clientes/crear_cliente", cliente);
 
 //----ventas-
 app.use("/ventas/registrar_venta", venta);
-
+ */
 
  // en comentarios para evitar confuncion al iniciar
 app.listen(PORT, () => {

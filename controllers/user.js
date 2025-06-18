@@ -67,10 +67,67 @@ const htttpuser = {
     },
 
     inicioseccion: async (req, res) => {
-        const valido = "cosa";
-        res.status(200).json({
-            message: 'prueba uso exitosamente.' + valido,
-        })
+        try {
+            const igual=0;
+            console.log("72" + igual);
+            
+            const {
+                correo_empleado,
+                contrasena
+            } = req.body;
+
+            const buscar= await user.findByIdAndDelete(correo_empleado);
+
+            console.log("81" +buscar);
+
+            if (!correo_empleado || !contrasena) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Todos los campos obligatorios deben ser proporcionados.'
+                });
+            }else if( correo_empleado !== buscar){
+                return res.status(400).json({
+                    success: false,
+                    error: 'no se encuentra usuario'
+                });
+            }
+            const salt= await bcryptjs.genSalt(1);
+            const hash= bcryptjs.hashSync(contrasena, salt);
+            console.log(salt);
+            
+            async function comparacontraseña(contrasena,hash) {
+                    try {
+                        const match = await bcryptjs.compare(contrasena,hash)
+                        return match
+                    } catch (error) {
+                        console.log(error)
+                        return false
+                    }
+            }
+
+            const match = await comparacontraseña(contrasena,hash)
+            if(match){
+                igual= true
+                console.log("107" + igual);
+                res.status(200).json({
+                success: true,
+                message: 'Usuario verificado.',
+            });
+            }else{
+                igual= false;
+                console.log("114" + igual);
+                res.status(200).json({
+                    success: false,
+                    error: 'la contraseña no coincide.'
+                });
+            }
+        } catch (error) {
+            console.log("125");
+            res.status(500).json({
+                success: false,
+                error: 'Error del servidor al validar usuario -m.'
+            });
+        }
     }
 
 }
